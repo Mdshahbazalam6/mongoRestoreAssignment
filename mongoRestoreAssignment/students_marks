@@ -1,0 +1,38 @@
+Count of all the female students
+db.students_marks.find({gender:"Female"}).count()
+
+Count of all male students who scored more that 85 in maths, science and english
+db.students_marks.find({$and :[{maths : {$gte : 85}},{science : {$gte : 85}},{english : {$gte : 85}}]}).count()
+
+Count of all students who scored between 50 and 75 marks in maths and english
+db.students_marks.find({$and : [{english : {$gte : 50}},{english : {$lte : 75}}]}).count()
+
+Count of students from class I to class V who score more that 50 in all subjects
+db.students_marks.find({$and : [{$and : [{class : {$gte : 'I'}},{class :{$lte : "V"}}]},{$and :[{maths :{$gte:50}},{english :{$gte:50}},{science :{$gte:50}}]}]}).count()
+
+Find all the female students from grade X section A who scored less that 25 in all subjects
+db.students_marks.find({$and :[{class :{$eq : 'X'}},{$and :[{maths :{$lte:25}},{english :{$lte:25}},{science :{$lte:25}}]}]}).count()
+
+Top 3 students in grade V based on maths score
+db.students_marks.find({class:"V"}).sort({maths : 1})
+
+Bottom 5 students in grade I based on science score
+db.students_marks.find({class:"I"}).sort({science : -1})
+
+Students from section A who scored less than 50 in all the subjects
+db.students_marks.find({$and :[{section:"A"},{maths :{$lte:50}},{english :{$lte:50}},{science :{$lte:50}}]})
+
+Students from section C who scored more that 75 in all the subjects
+db.students_marks.find({$and :[{section:"C"},{maths :{$gte:75}},{english :{$gte:75}},{science :{$gte:75}}]})
+
+Students who will fall in page 3 if ordered by increasing order of maths scores
+db.students_marks.find({}).sort({maths : 1}).limit(10).skip(2)
+
+Students who will fall in page 5 if ordered by descreasing order of science scores (Assume 20 results per page)
+db.students_marks.find({}).sort({science : -1}).limit(20).skip(2)
+
+Female Students who will fall in page 4 if ordered by increasing order of science scores and maths scores (Assume 5 results per page)
+db.students_marks.find({gender:"Female"}).sort({science : 1,maths:1}).limit(5).skip(2)
+
+Male Students who will fall in page 3 if ordered by decreasing order of science, maths and english scores (Assume 15 results per page)
+db.students_marks.find({gender:"Male"}).sort({science : -1,maths:-1,english:-1}).limit(15).skip(2)
